@@ -14,4 +14,31 @@
       docker_container_info:
         name: 'maven'
       register: result
-      
+    - name: Get IP.address
+      debug: 
+        msg: "{{result.container.NetworkSettings.IPAddress}}"
+    - name: Add container maven 
+      add_host:
+        name: maven
+        ansible_connection: docker
+      changed_when: false
+    - name: run command in maven 
+      delegate_to: maven
+      raw: cd /tmp && mvn clean package
+      register: result
+    - name: return value
+      debug:
+        msg: "{{ result.rc | trim }}"   
+    - name: build image
+      docker_image:
+        name: hello
+        build:
+          path: .
+        source: build
+    - name: docker run 
+      docker_container:
+        name: myhello
+        image: hello
+        state: 'started'
+        ports:
+          - "32520:8080"
