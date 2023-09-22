@@ -1,0 +1,15 @@
+---
+- name: Installation de hello gitlab
+  hosts: local
+  tasks:
+    - name: Start maven container
+      docker_container:
+        name: 'maven'
+        image: maven:3.6.3-jdk-11
+        state: 'started'
+      register: result
+    - name: get infos
+      docker_container_info:
+        name: 'maven'
+      register: result
+      
