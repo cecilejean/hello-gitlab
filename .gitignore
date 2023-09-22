@@ -1,0 +1,3 @@
+.vscode/sftp.json
+server/target/classes/com/example/Greeter.class
+server/target/test-classes/com/example/TestGreeter.class
